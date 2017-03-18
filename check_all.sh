@@ -16,7 +16,8 @@ now() {
 }
 
 setup () {
-	. "$(dirname $0)/config.sh"
+	cd "$(dirname $0)"
+	. config.sh
 
 	fetch_ip6=$(dig AAAA +short ${fetch_host} | tail -n 1)
 	fetch_ip4=$(dig A +short ${fetch_host} | tail -n 1)
@@ -34,7 +35,7 @@ addresses () {
 		echo "${rdisc_output}" | grep DNS | grep ${addr} 1>&2
 		print_result
 	else
-		check_dhcp -t 30 -i $device -s $addr 1>&2
+		./check_dhcp -t 30 $device $addr 1>&2
 		print_result
 	fi
 }

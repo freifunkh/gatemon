@@ -1,0 +1,8 @@
+
+# This is a really crude hack: If the gateway that has the host route is
+# unreachable on layer 2, Linux ignores the host route (if it isn't acting as a
+# router) and falls back to the route of the second-longest matching prefix
+# (probably the default route). In particular, it also ignores any other host
+# route with higher metric. Thus, we need to insert an unreachable route to a
+# network that still matches the host, but introduces minimal damage: its /127
+ip -6 route add unreachable ${IP6_TO_FETCH}/127

@@ -4,7 +4,9 @@
 apt-get install monitoring-plugins-basic monitoring-plugins-standard \
                 nagios-plugins-contrib ndisc6 dnsutils
 git clone https://github.com/freifunkh/gatemon /usr/lib/gatemon
-cp /usr/lib/gatemon/cron /etc/cron.d/gatemon_check_all
+cd /usr/lib/gatemon/cron
+make check_dhcp
+cp cron /etc/cron.d/gatemon_check_all
 ```
 
 Edit the configuration `/usr/lib/gatemon/config.sh`:

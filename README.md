@@ -31,7 +31,8 @@ api_url=http://harvester.ffh.zone/put.php
 process() {
         for i in $(seq 9); do
                 # sn06 is not existing yet :)
-                if [ $i -eq 6 ]; then
+                # sn03 is just playground
+                if [ $i -eq 6 ] || [ $i -eq 3 ]; then
                         continue;
                 fi
 

@@ -1,1 +1,1 @@
-*/10 * * * * root /usr/lib/gatemon/check_all.sh push || echo "check exited with error"
+*/10 * * * * root /usr/lib/gatemon/check_all.sh post || echo "check exited with error"

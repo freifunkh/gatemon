@@ -1,0 +1,1 @@
+*/10 * * * * root /usr/lib/gatemon/check_all.sh || echo "check exited with error"

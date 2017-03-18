@@ -1,14 +1,3 @@
-# Installation
-
-``` shell
-apt-get install monitoring-plugins-basic monitoring-plugins-standard nagios-plugins-contrib ndisc6 dnsutils
-git clone https://github.com/freifunkh/gatemon /usr/lib/gatemon
-cp /usr/lib/gatemon/cron /etc/cron.d/gatemon_check_all
-```
-
-Edit the configuration `/usr/lib/gatemon/config.sh`:
-
-``` shell
 #!/bin/sh
 
 # general config
@@ -36,5 +25,3 @@ process() {
                 process_host sn0${i}.s.ffh.zone fdca:ffee:8::${i}001 10.2.${i}0.1 addresses dns uplink
         done
 }
-```
-

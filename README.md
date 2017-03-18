@@ -3,12 +3,14 @@
 ``` shell
 apt-get install monitoring-plugins-basic monitoring-plugins-standard \
                 nagios-plugins-contrib ndisc6 dnsutils \
-                git build-essential
+                git build-essential curl
 git clone https://github.com/freifunkh/gatemon /usr/lib/gatemon
 cd /usr/lib/gatemon/
 make check_dhcp
 cp cron /etc/cron.d/gatemon_check_all
 ```
+
+Make sure NTP is enabled! The time drift must be below 60s. Otherwise your transmitted results will be rejected.
 
 Edit the configuration `/usr/lib/gatemon/config.sh`:
 

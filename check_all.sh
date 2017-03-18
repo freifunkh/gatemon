@@ -16,6 +16,7 @@ now() {
 }
 
 setup () {
+	PATH="$PATH:/usr/lib/nagios/plugins"
 	cd "$(dirname $0)"
 	. config.sh
 

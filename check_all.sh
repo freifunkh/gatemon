@@ -106,7 +106,6 @@ EOF
 }
 
 main() {
-	setup
 
 cat <<EOF
 {
@@ -124,6 +123,8 @@ cat <<EOF
 EOF
 
 }
+
+setup
 
 if [ "$1" = "post" ]; then
 	main 2> /dev/null | curl --max-time 5 -s -S -X POST -d @- "${api_url}?token=${token}" > /dev/null

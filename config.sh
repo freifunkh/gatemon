@@ -9,7 +9,7 @@ provider="HETZNER"                   # provider information
 
 # this data is needed to push to the master
 token=Goola4Ma
-api_url=http://harvester.ffh.zone/put.php
+api_url=https://harvester.ffh.zone/put.php
 
 
 # this function will be called to test all hosts

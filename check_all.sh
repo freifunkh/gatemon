@@ -2,7 +2,22 @@
 
 is_ip6 () {
 	# TODO: replace this with posix shell
-	[[ ${addr} == *:* ]]
+	local addr=$1
+        local stat=1
+        if [[ "${addr}" =~ ^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$ ]] ; then
+                local stat=0
+        elif [[ "${addr}" =~ ^.*::.*$ ]] ; then
+                local fields=$(for i in $(echo "${addr}" | sed 's/:/ /g'); do echo ${i} ; done | wc -l)
+                local addfield="0"
+                for i in $(seq 1 $(( 7-${fields} )) ) ; do
+                        local addfield="${addfield}:0"
+                done
+                local complete=$(sed "s/::/:${addfield}:/" <<< ${addr})
+                if [[ "${complete}" =~ ^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$ ]] ; then
+                        local stat=0
+                fi
+        fi
+        return ${stat}
 }
 
 uuid () {

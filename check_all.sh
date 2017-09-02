@@ -22,7 +22,7 @@ is_ip6 () {
 
 uuid () {
 	for file in /etc/machine-id /var/lib/dbus/machine-id /etc/hostid; do
-		[ -f "$file" ] && cat "$file" && break
+		[ -f "${file}" ] && cat "${file}" && break
 	done
 }
 
@@ -40,26 +40,26 @@ setup () {
 }
 
 print_result () {
-	test $? -eq 0 && echo 1 || echo 0
+	test ${?} -eq 0 && echo 1 || echo 0
 }
 
 addresses () {
-	addr=$1
+	local addr=${1}
 
 	if is_ip6 ${addr}; then
-		rdisc_output=${rdisc_output:-`rdisc6 -m ${device}`}
+		rdisc_output=${rdisc_output:-$(rdisc6 -m ${device})}
 		echo "${rdisc_output}" | grep DNS | grep ${addr} 1>&2
 		print_result
 	else
-		./check_dhcp -t 30 $device $addr 1>&2
+		./check_dhcp -t 30 ${device} ${addr} 1>&2
 		print_result
 	fi
 }
 
 dns () {
-	addr=$1
+	local addr=${1}
 
-	check_dns -H ${fetch_host} -s $addr 1>&2
+	check_dns -H ${fetch_host} -s ${addr} 1>&2
 	print_result
 }
 
@@ -70,7 +70,7 @@ ntp () {
 }
 
 uplink () {
-	addr=$1
+	addr=${1}
 
 	if is_ip6 ${addr}; then
 		ip route add ${fetch_ip6} via ${addr} dev ${device}
@@ -87,27 +87,27 @@ uplink () {
 
 
 process_host () {
-	local name=$1
-	local ip6=$2
-	local ip4=$3
-	shift; shift; shift;
+	local name=${1}
+	local ip6=${2}
+	local ip4=${3}
+	shift 3
 
 cat <<EOF
-	$host_sep
+	${host_sep}
 
 	{
 		"name": "${name}"
 
 EOF
 
-	while [ $# -ne 0 ]; do
+	while [ ${#} -ne 0 ]; do
 
 cat <<EOF
 		,
 
-		"$1": [{
-		    "ipv4": `$1 ${ip4}`,
-		    "ipv6": `$1 ${ip6}`
+		"${1}": [{
+		    "ipv4": $( ${1} ${ip4} ),
+		    "ipv6": $( ${1} ${ip6} )
 		}]
 
 EOF
@@ -126,7 +126,7 @@ main() {
 
 cat <<EOF
 {
-	"uuid": "`uuid`",
+	"uuid": "$(uuid)",
 	"name": "${name}",
 	"provider": "${provider}",
 	"vpn-servers": [
@@ -135,7 +135,7 @@ EOF
 cat <<EOF
 	],
 
-	"lastupdated": "`now`"
+	"lastupdated": "$(now)"
 }
 EOF
 
@@ -144,9 +144,9 @@ EOF
 setup
 
 if [ "$1" = "post" ]; then
-	main 2> /dev/null | curl --max-time 5 -s -S -X POST -d @- "${api_url}?token=${token}" > /dev/null
+	main 2>/dev/null | curl --max-time 5 -s -S -X POST -d @- "${api_url}?token=${token}" > /dev/null
 elif [ "$1" = "verbose" ]; then
 	main
 else
-	main 2> /dev/null
+	main 2>/dev/null
 fi
